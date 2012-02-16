@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="java-enet-wrapper" default="all">
+	<target name="jar">
+    	<jar destfile="org.bespin.enet.jar" basedir="bin">
+    	    <include name="org/bespin/enet/*.class" />
+    	</jar>
+	</target>
+	<target name="compile">
+    	<javac srcdir="src" destdir="bin">
+    	    <include name="org/bespin/enet/*.java" />
+    	</javac>
+	</target>
+	<target name="javah" depends="compile">
+		<javah destdir="../../java-enet-wrapper-native/java-enet-wrapper-native/include" classpath="bin">
+			<class name="org.bespin.enet.Event"/>
+			<class name="org.bespin.enet.Host"/>
+			<class name="org.bespin.enet.Packet"/>
+			<class name="org.bespin.enet.Peer"/>
+		</javah>
+	</target>
+	<target name="compilejar" depends="compile,jar"/>
+	<target name="all" depends="compilejar,javah"/>
+</project>
