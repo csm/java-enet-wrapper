@@ -23,6 +23,7 @@ public class Peer
         throws EnetException
     {
         send(nativeState, channelID, packet.nativeState);
+        packet.owned = false;
     }
     
     public Packet receive(MutableInteger channelID) throws EnetException

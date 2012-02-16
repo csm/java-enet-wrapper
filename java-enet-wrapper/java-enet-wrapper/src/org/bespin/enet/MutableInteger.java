@@ -37,4 +37,33 @@ public class MutableInteger extends Number
     {
         return this.value;
     }
+    
+    @Override
+    public String toString()
+    {
+        return String.valueOf(value);
+    }
+    
+    @Override
+    public int hashCode()
+    {
+        return value;
+    }
+    
+    @Override
+    public boolean equals(Object obj)
+    {
+        try
+        {
+            return ((MutableInteger) obj).value == this.value;
+        }
+        catch (NullPointerException npe)
+        {
+            return false;
+        }
+        catch (ClassCastException cce)
+        {
+            return false;
+        }
+    }
 }

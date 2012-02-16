@@ -1,32 +1,47 @@
 package org.bespin.enet;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.concurrent.TimeUnit;
 
 public class Host
 {
     static
     {
-        System.loadLibrary(System.mapLibraryName("java-enet-wrapper-native"));
+        try
+        {
+            System.loadLibrary(System.mapLibraryName("java-enet-wrapper-native"));
+        }
+        catch (UnsatisfiedLinkError ule)
+        {
+            System.load(new java.io.File(".").getAbsolutePath() + "/java-enet-wrapper-native/java-enet-wrapper-native/Debug/libjava-enet-wrapper-native.jnilib");
+        }
     }
     
     ByteBuffer nativeState;
     
+    static int addressToInt(InetAddress address) throws EnetException
+    {
+        if (!(address instanceof Inet4Address))
+            throw new EnetException("enet only supports IPv4");
+        ByteBuffer buf = ByteBuffer.wrap(address.getAddress());
+        buf.order(ByteOrder.nativeOrder());
+        return buf.getInt(0);
+    }
+    
     public Host(InetSocketAddress address, int peerCount, int channelLimit, int incomingBandwidth, int outgoingBandwidth)
         throws EnetException
     {
-        byte[] b = address.getAddress().getAddress();
-        int addr = ((b[0] & 0xFF) << 24) | ((b[1] & 0xFF) << 16) | ((b[2] & 0xFF) << 8) | (b[0] & 0xFF); 
-        nativeState = create(addr, address.getPort(), peerCount, channelLimit, incomingBandwidth, outgoingBandwidth);
+        nativeState = create(addressToInt(address.getAddress()), address.getPort(), peerCount, channelLimit, incomingBandwidth, outgoingBandwidth);
     }
     
     public Peer connect(InetSocketAddress address, int channelCount, int data)
         throws EnetException
     {
-        byte[] b = address.getAddress().getAddress();
-        int addr = ((b[0] & 0xFF) << 24) | ((b[1] & 0xFF) << 16) | ((b[2] & 0xFF) << 8) | (b[0] & 0xFF);
-        return new Peer(connect(nativeState, addr, address.getPort(), channelCount, data));
+        return new Peer(connect(nativeState, addressToInt(address.getAddress()), address.getPort(), channelCount, data));
     }
     
     public void broadcast(int channelID, Packet packet)

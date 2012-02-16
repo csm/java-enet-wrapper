@@ -41,11 +41,12 @@ public class Packet
         }
     }
     
-    private static final int FLAG_NO_ALLOCATE = (1 << 2);
+    boolean owned;
     
     Packet(ByteBuffer nativeState)
     {
         this.nativeState = nativeState;
+        owned = false;
     }
     
     public Packet(ByteBuffer buffer, EnumSet<Flag> flags)
@@ -59,12 +60,18 @@ public class Packet
         else
             this.buffer = buffer;
         this.nativeState = create(this.buffer, Flag.toBits(flags));
+        owned = true;
     }
     
     public Packet(byte[] bytes, int offset, int length, EnumSet<Flag> flags)
         throws EnetException
     {
         this(ByteBuffer.wrap(bytes, offset, length), flags);
+    }
+    
+    public Packet(byte[] bytes, EnumSet<Flag> flags) throws EnetException
+    {
+        this(bytes, 0, bytes.length, flags);
     }
     
     public ByteBuffer getBytes() throws EnetException
@@ -81,7 +88,9 @@ public class Packet
     
     protected void finalize() throws Throwable
     {
-        destroy(nativeState);
+        if (owned)
+            destroy(nativeState);
+        super.finalize();
     }
     
     private static native ByteBuffer create(ByteBuffer data, int flags) throws EnetException;
