@@ -13,11 +13,14 @@ public class Host
     {
         try
         {
+            System.out.println("load from " + System.getProperty("java.library.path"));
             System.loadLibrary(System.mapLibraryName("java-enet-wrapper-native"));
         }
         catch (UnsatisfiedLinkError ule)
         {
-            System.load(new java.io.File(".").getAbsolutePath() + "/java-enet-wrapper-native/java-enet-wrapper-native/Debug/libjava-enet-wrapper-native.jnilib");
+            ule.printStackTrace();
+            String lib = System.getProperty("enet.jnilib");
+            System.load(lib);
         }
     }
     
