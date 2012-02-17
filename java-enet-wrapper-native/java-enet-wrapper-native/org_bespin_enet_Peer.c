@@ -9,6 +9,12 @@
 #include <enet/enet.h>
 #include <org_bespin_enet_Peer.h>
 
+#ifdef DEBUG
+#define debug(fmt,args...) printf(fmt, ##args)
+#else
+#define debug(fmt,args...)
+#endif
+
 /*
  * Class:     org_bespin_enet_Peer
  * Method:    throttleConfigure
@@ -31,7 +37,12 @@ JNIEXPORT void JNICALL Java_org_bespin_enet_Peer_send
 {
 	ENetPeer *peer = (ENetPeer *) (*env)->GetDirectBufferAddress(env, ctx);
 	ENetPacket *_packet = (ENetPacket *) (*env)->GetDirectBufferAddress(env, packet);
-	enet_peer_send(peer, (enet_uint8) channel, _packet);
+	int ret = enet_peer_send(peer, (enet_uint8) channel, _packet);
+	debug("send(%p, %p, %p, %lu) = %d\n", peer, _packet, _packet->data, _packet->dataLength, ret);
+	if (ret != 0)
+	{
+		(*env)->ThrowNew(env, (*env)->FindClass(env, "org/bespin/enet/EnetException"), "send failed");
+	}
 }
 
 /*

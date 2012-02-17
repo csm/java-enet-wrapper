@@ -48,26 +48,26 @@ JNIEXPORT jobject JNICALL Java_org_bespin_enet_Event_type
 	ENetEvent *event = (*env)->GetDirectBufferAddress(env, ctx);
 	if (event != NULL)
 	{
-		jclass enumClass = (*env)->FindClass(env, "net/bespin/enet/Event$Type");
+		jclass enumClass = (*env)->FindClass(env, "org/bespin/enet/Event$Type");
 		if (enumClass == NULL)
 			return NULL;
 		jfieldID field = NULL;
 		switch (event->type)
 		{
 		case ENET_EVENT_TYPE_CONNECT:
-			field = (*env)->GetStaticFieldID(env, enumClass, "Connect", "Lnet/bespin/enet/Event$Type;");
+			field = (*env)->GetStaticFieldID(env, enumClass, "Connect", "Lorg/bespin/enet/Event$Type;");
 			break;
 
 		case ENET_EVENT_TYPE_DISCONNECT:
-			field = (*env)->GetStaticFieldID(env, enumClass, "Disconnect", "Lnet/bespin/enet/Event$Type;");
+			field = (*env)->GetStaticFieldID(env, enumClass, "Disconnect", "Lorg/bespin/enet/Event$Type;");
 			break;
 
 		case ENET_EVENT_TYPE_NONE:
-			field = (*env)->GetStaticFieldID(env, enumClass, "None", "Lnet/bespin/enet/Event$Type;");
+			field = (*env)->GetStaticFieldID(env, enumClass, "None", "Lorg/bespin/enet/Event$Type;");
 			break;
 
 		case ENET_EVENT_TYPE_RECEIVE:
-			field = (*env)->GetStaticFieldID(env, enumClass, "Receive", "Lnet/bespin/enet/Event$Type;");
+			field = (*env)->GetStaticFieldID(env, enumClass, "Receive", "Lorg/bespin/enet/Event$Type;");
 			break;
 		}
 

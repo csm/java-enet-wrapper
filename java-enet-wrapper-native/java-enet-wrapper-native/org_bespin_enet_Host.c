@@ -9,6 +9,12 @@
 #include <enet/enet.h>
 #include <org_bespin_enet_Host.h>
 
+#ifdef DEBUG
+#define debug(fmt,args...) printf(fmt, ##args)
+#else
+#define debug(fmt,args...)
+#endif
+
 /*
  * Class:     org_bespin_enet_Host
  * Method:    create
@@ -18,6 +24,7 @@ JNIEXPORT jobject JNICALL Java_org_bespin_enet_Host_create
   (JNIEnv *env, jclass cls, jint address, jint port, jint peerCount, jint channelCount, jint inbw, jint outbw)
 {
 	const ENetAddress addr = { (enet_uint32) address, (enet_uint16) port };
+	debug("create addr: { %08x, %d }\n", addr.host, addr.port);
 	ENetHost *host = enet_host_create(&addr, peerCount, channelCount, inbw, outbw);
 	if (host == NULL)
 	{
@@ -120,7 +127,7 @@ JNIEXPORT jint JNICALL Java_org_bespin_enet_Host_checkEvents
 		int ret = enet_host_check_events(host, event);
 		if (ret < 0)
 		{
-			(*env)->ThrowNew(env, (*env)->FindClass(env, "net/bespin/enet/EnetException"), "failed to check events");
+			(*env)->ThrowNew(env, (*env)->FindClass(env, "org/bespin/enet/EnetException"), "failed to check events");
 			return -1;
 		}
 		return ret;
@@ -145,7 +152,7 @@ JNIEXPORT jint JNICALL Java_org_bespin_enet_Host_service
 		int ret = enet_host_service(host, event, timeout);
 		if (ret < 0)
 		{
-			(*env)->ThrowNew(env, (*env)->FindClass(env, "net/bespin/enet/EnetException"), "failed to service host");
+			(*env)->ThrowNew(env, (*env)->FindClass(env, "org/bespin/enet/EnetException"), "failed to service host");
 			return -1;
 		}
 		return ret;
