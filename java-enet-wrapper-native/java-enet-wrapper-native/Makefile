@@ -11,18 +11,23 @@ CFLAGS=-g -O2 -Iinclude
 CC=gcc
 CCLD=$(CC)
 LIBS := -lenet
+ENET_CFLAGS =
+ENET_LDFLAGS =
 
 ifeq ($(SYSTEM),Darwin)
   SHLIB_EXT=jnilib
   SHARED=-dynamiclib
   EXTRA_LIBS=-lSystem
-  JDK_INCLUDES=-I/System/Library/Frameworks/JavaVM.framework/Versions/Current/Headers
+  JAVA_HOME = /System/Library/Frameworks/JavaVM.framework/Versions/Current
+  JDK_INCLUDES = -I$(JAVA_HOME)/Headers
+  CFLAGS=$(CFLAGS) -arch x86_64 -arch i386
 else
 ifeq ($(SYSTEM),Linux)
   SHLIB_EXT=so
   SHARED=-shared
   EXTRA_LIBS=
-  JDK_INCLUDES=-I$(shell readlink -f `which javac` | sed 's:bin/javac::')/include
+  JAVA_HOME = $(shell readlink -f `which javac` | sed 's:bin/javac::')
+  JDK_INCLUDES=-I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux
 else
 abort Unsupported system $(SYSTEM)
 endif
