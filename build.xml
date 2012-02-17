@@ -3,6 +3,7 @@
 <project name="java-enet-wrapper" default="all">
     <target name="all">
         <ant antfile="build.xml" target="all" dir="java-enet-wrapper/java-enet-wrapper" />
-    	<exec command="make" dir="java-enet-wrapper-native/java-enet-wrapper-native" />
+    	<exec executable="make" dir="java-enet-wrapper-native/java-enet-wrapper-native">
+    	</exec>
     </target>
 </project>
