@@ -38,7 +38,7 @@ TARGET=libjava-enet-wrapper-native.$(SHLIB_EXT)
 all: $(TARGET)
 
 $(TARGET): $(OBJECTS)
-	$(CCLD) $(SHARED) -o $(TARGET) $(OBJECTS) $(EXTRA_LIBS) $(LIBS)
+	$(CCLD) $(SHARED) -o $(TARGET) $(OBJECTS) $(ENET_LDFLAGS) $(EXTRA_LIBS) $(LIBS)
 
 $(OBJECTS): %.o: %.c
-	$(CC) $(CFLAGS) $(JDK_INCLUDES) -c -o $@ $<
+	$(CC) $(CFLAGS) $(JDK_INCLUDES) $(ENET_CFLAGS) -c -o $@ $<
