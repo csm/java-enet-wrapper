@@ -1,9 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project name="java-enet-wrapper" default="all">
-	<target name="jar">
+    <target name="setvars">
+        <exec executable="git" outputproperty="git.branch">
+            <arg value="rev-parse"/>
+            <arg value="--abbrev-ref"/>
+            <arg value="HEAD"/>
+        </exec>
+        <exec executable="git" outputproperty="git.commit">
+            <arg value="rev-parse"/>
+            <arg value="HEAD"/>
+        </exec>
+        <exec executable="git" outputproperty="git.tag" >
+            <arg value="describe"/>
+            <arg value="--abbrev=0"/>
+            <arg value="--tags"/>
+        </exec>
+        <exec executable="bash" outputproperty="git.dirty">
+            <arg value="-c"/>
+            <arg value="expr $(git status --porcelain . 2>/dev/null| egrep &quot;^(M| M)&quot; | wc -l)"/>
+        </exec>
+        <exec executable="date" outputproperty="build.date">
+        </exec>
+    </target>
+	<target name="jar" depends="setvars">
     	<jar destfile="org.bespin.enet.jar" basedir="bin">
     	    <include name="org/bespin/enet/*.class" />
+            <manifest>
+                <attribute name="git-branch" value="${git.branch}"/>
+                <attribute name="git-commit" value="${git.commit}"/>
+                <attribute name="git-tag" value="${git.tag}"/>
+                <attribute name="git-dirty" value="${git.dirty}"/>
+                <attribute name="build-date" value="${build.date}"/>
+            </manifest>
     	</jar>
 	</target>
 	<target name="compile">
