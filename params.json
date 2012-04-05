@@ -1,0 +1,1 @@
+{"name":"Java enet wrapper","body":"### Simple JNI wrapper around enet\r\n\r\nThis project implements a simple JNI wrapper around the [enet](http://enet.bespin.org/) networking library.","tagline":"Java/JNI wrapper around enet","google":"","note":"Don't delete this file! It's used internally to help with page regeneration."}
