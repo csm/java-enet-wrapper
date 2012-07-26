@@ -4,7 +4,7 @@ SOURCES := org_bespin_enet_Event.c \
 	org_bespin_enet_Host.c \
 	org_bespin_enet_Packet.c \
 	org_bespin_enet_Peer.c
-	
+
 OBJECTS := $(SOURCES:.c=.o)
 SYSTEM := $(shell uname -s)
 CFLAGS=-g -O2 -Iinclude
