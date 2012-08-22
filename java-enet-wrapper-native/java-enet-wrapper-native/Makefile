@@ -7,7 +7,7 @@ SOURCES := org_bespin_enet_Event.c \
 
 OBJECTS := $(SOURCES:.c=.o)
 SYSTEM := $(shell uname -s)
-CFLAGS=-g -O2 -Iinclude
+CFLAGS=-g -O2 -Iinclude -fPIC
 CC=gcc
 CCLD=$(CC)
 LIBS := -lenet
