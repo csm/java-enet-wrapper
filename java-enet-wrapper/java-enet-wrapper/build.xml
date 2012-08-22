@@ -36,7 +36,7 @@
     	</jar>
 	</target>
 	<target name="compile">
-    	<javac srcdir="src" destdir="bin">
+       <javac srcdir="src/main/java" destdir="bin">
     	    <include name="org/bespin/enet/*.java" />
     	</javac>
 	</target>
