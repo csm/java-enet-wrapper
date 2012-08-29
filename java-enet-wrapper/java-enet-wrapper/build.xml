@@ -23,7 +23,10 @@
         <exec executable="date" outputproperty="build.date">
         </exec>
     </target>
-	<target name="jar" depends="setvars">
+    <target name="mkdirs">
+        <mkdir dir="bin"/>
+    </target>
+	<target name="jar" depends="setvars,mkdirs">
     	<jar destfile="org.bespin.enet.jar" basedir="bin">
     	    <include name="org/bespin/enet/*.class" />
             <manifest>
