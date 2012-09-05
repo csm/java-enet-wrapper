@@ -1,5 +1,9 @@
 package org.bespin.enet;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -13,6 +17,31 @@ public class Host
     {
         try
         {
+            ClassLoader loader = Host.class.getClassLoader();
+            InputStream in = loader.getResourceAsStream("libjava-enet-wrapper-native.so");
+            File tmpdir = new File(System.getProperty("java.io.tmpdir"));
+            File libout = new File(tmpdir, "libjava-enet-wrapper-native.so");
+            FileOutputStream out = new FileOutputStream(libout);
+            byte[] b = new byte[1024];
+            int len = 0;
+            while ((len = in.read(b)) != -1)
+                out.write(b, 0, len);
+            in.close();
+            out.close();
+            System.load(libout.getAbsolutePath());
+        }
+        catch (UnsatisfiedLinkError ule)
+        {
+            System.err.println("failed to load embedded native library!");
+            ule.printStackTrace();
+        }
+        catch (IOException ioe)
+        {
+            System.err.println("failed to load embedded native library!");
+            ioe.printStackTrace();
+        }
+        /*try
+        {
             System.out.println("load from " + System.getProperty("java.library.path"));
             System.loadLibrary(System.mapLibraryName("java-enet-wrapper-native"));
         }
@@ -21,7 +50,7 @@ public class Host
             ule.printStackTrace();
             String lib = System.getProperty("enet.jnilib");
             System.load(lib);
-        }
+        }*/
     }
     
     ByteBuffer nativeState;

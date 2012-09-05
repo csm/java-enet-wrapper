@@ -25,6 +25,7 @@
     </target>
     <target name="mkdirs">
         <mkdir dir="bin"/>
+    	<mkdir dir="../../java-enet-wrapper-native/java-enet-wrapper-native/include"/>
     </target>
 	<target name="jar" depends="setvars,mkdirs">
     	<jar destfile="org.bespin.enet.jar" basedir="bin">
@@ -43,13 +44,16 @@
     	    <include name="org/bespin/enet/*.java" />
     	</javac>
 	</target>
-	<target name="javah" depends="compile">
+	<target name="javah" depends="compile,mkdirs">
 		<javah destdir="../../java-enet-wrapper-native/java-enet-wrapper-native/include" classpath="bin">
 			<class name="org.bespin.enet.Event"/>
 			<class name="org.bespin.enet.Host"/>
 			<class name="org.bespin.enet.Packet"/>
 			<class name="org.bespin.enet.Peer"/>
 		</javah>
+	</target>
+	<target name="nativebuild" depends="javah">
+	    <exec executable="make" dir="../../java-enet-wrapper-native/java-enet-wrapper-native"/>
 	</target>
 	<target name="compilejar" depends="compile,jar"/>
 	<target name="all" depends="compilejar,javah"/>
