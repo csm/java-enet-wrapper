@@ -19,9 +19,10 @@ public class Host
         {
             ClassLoader loader = Host.class.getClassLoader();
             InputStream in = loader.getResourceAsStream("libjava-enet-wrapper-native.so");
-            File tmpdir = new File(System.getProperty("enet.tmpdir"));
-	    if (!tmpdir.exists())
-		tmpdir = new File(System.getProperty("java.io.tmpdir"));
+	    String tmpname = System.getProperty("org.bespin.enet.tmpdir");
+	    if (tmpname == null)
+		tmpname = System.getProperty("java.io.tmpdir");
+            File tmpdir = new File(tmpname);
             File libout = new File(tmpdir, "libjava-enet-wrapper-native.so");
             FileOutputStream out = new FileOutputStream(libout);
             byte[] b = new byte[1024];
