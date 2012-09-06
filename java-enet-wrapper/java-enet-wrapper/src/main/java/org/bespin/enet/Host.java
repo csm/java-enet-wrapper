@@ -19,7 +19,9 @@ public class Host
         {
             ClassLoader loader = Host.class.getClassLoader();
             InputStream in = loader.getResourceAsStream("libjava-enet-wrapper-native.so");
-            File tmpdir = new File(System.getProperty("java.io.tmpdir"));
+            File tmpdir = new File(System.getProperty("enet.tmpdir"));
+	    if (!tmpdir.exists())
+		tmpdir = new File(System.getProperty("java.io.tmpdir"));
             File libout = new File(tmpdir, "libjava-enet-wrapper-native.so");
             FileOutputStream out = new FileOutputStream(libout);
             byte[] b = new byte[1024];
